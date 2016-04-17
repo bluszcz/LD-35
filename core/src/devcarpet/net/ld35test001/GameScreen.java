@@ -14,6 +14,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -75,7 +76,7 @@ public class GameScreen implements Screen {
     
     
     void addVotingCard() {
-    	Vote card = new Vote();
+    	Vote card = new Vote(currentLevel);
     	votingCards.add(card);	
     }
     
@@ -107,7 +108,7 @@ public class GameScreen implements Screen {
 		
 		levelsEnemies = new int[]{4,12,38};
 		
-    	arraySize = levelsEnemies[level];
+    	arraySize = levelsEnemies[currentLevel];
 		characters = new Character[arraySize];
 		Random rn = new Random();
 
@@ -129,7 +130,7 @@ public class GameScreen implements Screen {
 			String filename = names[answer];
 //			float posX = (i * 70) + (answer*25) + (150*i);
 			
-			float posX = 0 + (i * distStep) + (i * 70);
+			float posX = 0 + (i * distStep) + (i * 70)+100;
 			System.out.println(distStep + " " + posX);
 			float posY = rn.nextInt(70);
 			int lives = rn.nextInt(20)+5;
@@ -144,7 +145,7 @@ public class GameScreen implements Screen {
 		
 //		votingCard = new Vote();
 		votingCards = new Vector();
-		for (int i=0;i<3;i++)
+		for (int i=0;i<3*(currentLevel+1);i++)
 		{
 			addVotingCard();
 
@@ -284,7 +285,7 @@ public class GameScreen implements Screen {
 		timeCounter += delta;
 		
 		spawnCounter +=delta;
-		if (spawnCounter>4)
+		if (spawnCounter>8/(currentLevel+1))
 		{
 			addVotingCard();
 			spawnCounter = 0.0f;
@@ -333,12 +334,20 @@ public class GameScreen implements Screen {
         effectExplosion.draw(game.batch, delta);
 
         
+        if (timeCounter<5)
+        {        
+        	
+            game.font60.draw(game.batch, "level: "+(currentLevel+1), 290, 280);
+
+        	
+        }
+        
         game.fontBlack.draw(game.batch, "lives: "+deerLives, 30, 472);
         game.fontBlack.draw(game.batch, "points: "+points, 600, 472);
         game.fontBlack.draw(game.batch, "time: "+(int)timeCounter, 300, 472);
 
         
-        game.font.draw(game.batch, "cards: "+votingCards.size(), 30, 20);
+        game.font20.draw(game.batch, "cards: "+votingCards.size(), 30, 20);
         
         int counterDevelopers = 0;
 		for (int i=0;i<arraySize;i++)
@@ -346,7 +355,7 @@ public class GameScreen implements Screen {
 			if (characters[i].life>0)
 				counterDevelopers++;
 		}
-        game.font.draw(game.batch, "developers: "+counterDevelopers, 660, 20);
+        game.font20.draw(game.batch, "developers: "+counterDevelopers, 620, 20);
 
 //        game.font.draw(game.batch, "cards: "+votingCards.size(), 30, 10);
         game.batch.draw(hoof,360,0);

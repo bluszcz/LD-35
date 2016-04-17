@@ -18,13 +18,13 @@ public class Vote {
 	Vector2 posShoot;
 	public float shootTimeLeft;
 	
-	
+	int currentLevel;
 	float osc;
 	int life;
 	Texture card;
-	public Vote() {
+	public Vote(int level) {
 		card = new Texture("votingcard.png");
-		
+		currentLevel = level+1;
 		
 		Random rn = new Random();
 
@@ -45,7 +45,11 @@ public class Vote {
 	void update(float delta)
 	{
     	float move;
-		move = (float) (0.1/delta);
+    	
+    	float speed = 0.03f * currentLevel;
+    	
+
+		move = (float) (speed/delta);
 		if (direction==Direction.RIGHT)
 		{
 			position.x += move;

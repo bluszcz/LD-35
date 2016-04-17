@@ -17,6 +17,8 @@ public class LD35001 extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
     public BitmapFont fontBlack;
+    public BitmapFont font20;
+    public BitmapFont font60;
 
 
     public String[] menuTextStory;
@@ -30,15 +32,18 @@ public class LD35001 extends Game {
         font = new BitmapFont();
         
         fontBlack = new BitmapFont(Gdx.files.internal("ld35001-gradient.fnt"));
+        font20 = new BitmapFont(Gdx.files.internal("ld35001-gradient-20.fnt"));
+        font60 = new BitmapFont(Gdx.files.internal("ld35001-gradient-60.fnt"));
+
         
 //        fontBlack.setColor(Color.BLACK);
         
         menuTextStory = new String[20];
         menuTextStory[0] = "Earth, 2016";
-        menuTextStory[1] = "Planet populated by weirdos mostly.";
-        menuTextStory[2] = "MC, a game designer";
+        menuTextStory[1] = "Our planet.";
+        menuTextStory[2] = "You are a game designer,";
         menuTextStory[3] = "who had decided to participate";
-        menuTextStory[4] = "in Ludum Dare 35";
+        menuTextStory[4] = "in Ludum Dare 35.";
         menuTextStory[5] = "was awaiting all night long";
         menuTextStory[6] = "to see the voting results.";
         menuTextStory[7] = "Until 3 fucking am.";
@@ -58,7 +63,6 @@ public class LD35001 extends Game {
         customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("crossair.png")), 16, 16);
         Gdx.graphics.setCursor(customCursor);
 
-        
         menuTextCords = new float[20][];
 
         float startTextX = 720;
