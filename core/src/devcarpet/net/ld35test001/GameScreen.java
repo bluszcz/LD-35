@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
 
     Character character;
 	
-    
+    int currentLevel;
     float timeCounter;
     float spawnCounter;
     
@@ -64,6 +64,9 @@ public class GameScreen implements Screen {
     int deerLives;
     int points;
     Rectangle rectHoof;
+    
+    int levelsEnemies[];
+    
 //    Vote votingCard;
     
     Vector3 getMousePosInGameWorld() {
@@ -77,8 +80,9 @@ public class GameScreen implements Screen {
     }
     
     
-    public GameScreen(final LD35001 gam) {
-    	deerLives = 1;
+    public GameScreen(final LD35001 gam, int level) {
+    	currentLevel = level;
+    	deerLives = 3;
     	this.game = gam;
 		background = new Texture("bg-alpha-2400wide.png");
 		backgroundOut = new Texture("sky-bg.jpg");
@@ -100,7 +104,10 @@ public class GameScreen implements Screen {
 
 		effect.load(Gdx.files.internal("explosion.p"), Gdx.files.internal(""));
 		effectExplosion.load(Gdx.files.internal("huge-explosion.p"), Gdx.files.internal(""));
-    	arraySize = 38;
+		
+		levelsEnemies = new int[]{4,12,38};
+		
+    	arraySize = levelsEnemies[level];
 		characters = new Character[arraySize];
 		Random rn = new Random();
 
@@ -111,28 +118,44 @@ public class GameScreen implements Screen {
 	    	soundsAw[i] = Gdx.audio.newSound(Gdx.files.internal("aw0"+(i+1)+".ogg"));
 	    }
 		
-		String names[] = new String[] {"char-1.png","char-2.png"};
+		String names[] = new String[] {"char-1.png","char-2.png", "char-3.png"};
 		
+		
+		int distStep = 1600/arraySize;
 		
 		for (int i=0;i<arraySize;i++)
 		{
-			int answer = rn.nextInt(2);
-			System.out.println(answer);
+			int answer = rn.nextInt(3);
 			String filename = names[answer];
-			float posX = (i * 70) + (answer*25) + (150*i);
+//			float posX = (i * 70) + (answer*25) + (150*i);
+			
+			float posX = 0 + (i * distStep) + (i * 70);
+			System.out.println(distStep + " " + posX);
 			float posY = rn.nextInt(70);
 			int lives = rn.nextInt(20)+5;
 			characters[i] = new Character(posX, posY, filename, lives);
 			
 		}
-//		characters[0] = new Character(750, 0, "char-1.png", 20);
-//		characters[1] = new Character(1550, 30, "char-2.png", 5);
-//		characters[2] = new Character(350, 30, "char-2.png", 5);
-//		characters[3] = new Character(1250, 30, "char-1.png", 15);
-//		characters[4] = new Character(2250, 30, "char-1.png", 15);
-//		characters[5] = new Character(2550, 30, "char-2.png", 15);
-//		characters[6] = new Character(2850, 30, "char-2.png", 15);
 
+
+		rectHoof = new Rectangle(360,0,hoof.getWidth(), hoof.getHeight());
+
+		points = 0;
+		
+//		votingCard = new Vote();
+		votingCards = new Vector();
+		for (int i=0;i<3;i++)
+		{
+			addVotingCard();
+
+		}
+		for (int i=0;i<arraySize;i++)
+		{
+			characters[i].update(0);
+		}
+		
+		timeCounter = spawnCounter = 0.0f;
+		shapeRenderer = new ShapeRenderer();
 		Gdx.input.setInputProcessor(new InputAdapter () {
 			public boolean  touchDown(int screenX,
 					int screenY,
@@ -191,21 +214,6 @@ public class GameScreen implements Screen {
 			}
 
 		});
-		rectHoof = new Rectangle(360,0,hoof.getWidth(), hoof.getHeight());
-
-		points = 0;
-		
-//		votingCard = new Vote();
-		votingCards = new Vector();
-		for (int i=0;i<3;i++)
-		{
-			addVotingCard();
-
-		}
-
-		
-		timeCounter = spawnCounter = 0.0f;
-		shapeRenderer = new ShapeRenderer();
 		gameMusic.play();
 
 		
@@ -345,6 +353,10 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 		
+        if (counterDevelopers==0)
+        {
+        	nextLevel();
+        }
 
 		// TODO Auto-generated method stub
         if (Gdx.input.isButtonPressed(Buttons.LEFT)){
@@ -445,4 +457,11 @@ public class GameScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	void nextLevel() {
+		gameMusic.stop();
+        game.setScreen(new GameScreen(game, currentLevel+1));
+        dispose();
+	}
+	
 }
