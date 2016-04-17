@@ -18,6 +18,10 @@ public class Vote {
 	Vector2 posShoot;
 	public float shootTimeLeft;
 	
+	
+	
+	int variety;
+	
 	int currentLevel;
 	float osc;
 	int life;
@@ -29,7 +33,7 @@ public class Vote {
 		Random rn = new Random();
 
 		
-		
+		variety = rn.nextInt(10)+1;
 		
 		position = new Vector2(0,200);
 		position.x = rn.nextInt(1500);
@@ -69,7 +73,7 @@ public class Vote {
 			direction=Direction.RIGHT;
 			
 		}		
-		osc += delta*10;
+		osc += delta*20/variety;
 		float result = MathUtils.sin(osc);
 		position.y += result;
 		

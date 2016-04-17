@@ -1,5 +1,7 @@
 package devcarpet.net.ld35test001;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 import java.util.Vector;
@@ -27,7 +29,7 @@ import devcarpet.net.ld35test001.LD35001.Direction;
 public class GameScreen implements Screen {
 	final LD35001 game;
 
-
+	float osc;
 	ShapeRenderer shapeRenderer;
 
 	SpriteBatch batch;
@@ -42,6 +44,8 @@ public class GameScreen implements Screen {
 
 	ParticleEffect effectExplosion;
 
+	Vector2 hoofPos;
+	
 	Sound shootSound;
 	Sound explosionSound;
 
@@ -83,7 +87,8 @@ public class GameScreen implements Screen {
 
 	public GameScreen(final LD35001 gam, int level, int newPoints) {
 		currentLevel = level;
-		deerLives = 1;
+		osc = 0.0f;
+		deerLives = 3;
 		this.game = gam;
 		background = new Texture("bg-alpha-2400wide.png");
 		backgroundOut = new Texture("sky-bg.jpg");
@@ -94,7 +99,7 @@ public class GameScreen implements Screen {
 		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("theme-chill.ogg"));
 		shootSound = Gdx.audio.newSound(Gdx.files.internal("cast.ogg"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
-
+		hoofPos = new Vector2(360,-20);
 
 		gameMusic.setLooping(true);
 		camera = new OrthographicCamera();
@@ -106,7 +111,7 @@ public class GameScreen implements Screen {
 		effect.load(Gdx.files.internal("explosion.p"), Gdx.files.internal(""));
 		effectExplosion.load(Gdx.files.internal("huge-explosion.p"), Gdx.files.internal(""));
 
-		levelsEnemies = new int[]{4,12,38};
+		levelsEnemies = new int[]{24,12,38};
 
 		arraySize = levelsEnemies[currentLevel];
 		characters = new Character[arraySize];
@@ -119,10 +124,10 @@ public class GameScreen implements Screen {
 			soundsAw[i] = Gdx.audio.newSound(Gdx.files.internal("aw0"+(i+1)+".ogg"));
 		}
 
-		 names = new String[][] {			{"char-3.png"},
-			{"char-2.png", "char-3.png"},
-			{"char-1.png","char-2.png", "char-3.png"},
-			{"char-1.png","char-2.png", "char-final.png"}};
+		 names = new String[][] {		
+			 {"char-1.png","char-2.png"},
+			 {"char-1.png","char-2.png","char-3.png"},
+			{"char-1.png","char-2.png", "char-3.png"}};
 		
 
 		int distStep = 1600/arraySize;
@@ -142,7 +147,7 @@ public class GameScreen implements Screen {
 		}
 
 
-		rectHoof = new Rectangle(360,0,hoof.getWidth(), hoof.getHeight());
+		rectHoof = new Rectangle(hoofPos.x,hoofPos.y,hoof.getWidth(), hoof.getHeight());
 
 		points = newPoints;
 
@@ -359,10 +364,13 @@ public class GameScreen implements Screen {
 		game.font20.draw(game.batch, "developers: "+counterDevelopers, 620, 20);
 
 		//        game.font.draw(game.batch, "cards: "+votingCards.size(), 30, 10);
-		game.batch.draw(hoof,360,0);
+		game.batch.draw(hoof,hoofPos.x,hoofPos.y);
 
 		game.batch.end();
 
+		
+		
+		
 		if (counterDevelopers==0)
 		{
 			nextLevel();
@@ -393,9 +401,12 @@ public class GameScreen implements Screen {
 				if (votingCards.get(i).shootTimeLeft>0)
 				{
 					float x,y,x2,y2;
+					
 					x = votingCards.get(i).position.x;
 					y = votingCards.get(i).position.y;
-					shapeRenderer.line(x, y, 
+					x2 = x + (votingCards.get(i).card.getWidth()/2);
+					y2 = y + (votingCards.get(i).card.getHeight()/2);
+					shapeRenderer.line(x2, y2, 
 							votingCards.get(i).posShoot.x,
 							votingCards.get(i).posShoot.y);	
 				}
@@ -406,7 +417,10 @@ public class GameScreen implements Screen {
 		}
 		shapeRenderer.end();
 
-
+		
+		osc += delta*5;
+		float result = MathUtils.sin(osc);
+		hoofPos.y += result;
 		for (int i = votingCards.size()-1; i >= 0; i--)
 		{
 			if (votingCards.get(i).life>0)
@@ -465,10 +479,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		Gdx.input.setInputProcessor(new InputAdapter ());
-		hoof.dispose();
-		gameMusic.dispose();
-		shootSound.dispose();
+		
+//		hoof.dispose();
+//		gameMusic.dispose();
+//		shootSound.dispose();
 		
 
 	}
@@ -476,7 +490,7 @@ public class GameScreen implements Screen {
 	void nextLevel() {
 		gameMusic.stop();
 		
-		if (currentLevel+1==1)
+		if (currentLevel+1==4)
 		{
 			game.setScreen(new GameFinishScreen(game, points, deerLives, currentLevel));
 			dispose();

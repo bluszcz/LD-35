@@ -1,6 +1,7 @@
 package devcarpet.net.ld35test001;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,6 +24,7 @@ public class GameOverScreen implements Screen {
         currentLevel = level;
         deerLives = lives;
         points = newPoints;
+        Gdx.input.setInputProcessor(new InputAdapter ());
     }
 
 	@Override
@@ -38,7 +40,7 @@ public class GameOverScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
-		game.font60.draw(game.batch, "Game Over", 290, 280);
+		game.font60.draw(game.batch, "Game Over", 200, 280);
 		game.font20.draw(game.batch, "Points: "+points, 40, 180);
 		game.font20.draw(game.batch, "Lives: "+deerLives, 40, 120);
 		game.font20.draw(game.batch, "Level: "+(currentLevel+1), 40, 60);
