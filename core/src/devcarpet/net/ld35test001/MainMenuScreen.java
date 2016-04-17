@@ -37,11 +37,11 @@ public class MainMenuScreen implements Screen {
         game = gam;
 
         camera = new OrthographicCamera();
-        
+        camera.setToOrtho(false, 800, 480);
+
         
         showingDeer = 0;
         
-        camera.setToOrtho(false, 800, 480);
         
 		batch = new SpriteBatch();
 		img = new Texture("ludum-promo01.jpg");
