@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
 			float posX = 0 + (i * distStep) + (i * 70)+100;
 			System.out.println(distStep + " " + posX);
 			float posY = rn.nextInt(70);
-			int lives = rn.nextInt(20)+5;
+			int lives = rn.nextInt((currentLevel+1)*3)+5;
 			characters[i] = new Character(posX, posY, filename, lives);
 
 		}
