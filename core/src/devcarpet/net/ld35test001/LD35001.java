@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.Color;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class LD35001 extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
+    public BitmapFont fontBlack;
+
 
     public String[] menuTextStory;
     public float[][] menuTextCords;
@@ -24,8 +27,11 @@ public class LD35001 extends Game {
     
     public void create() {
         batch = new SpriteBatch();
-        //Use LibGDX's default Arial font.
         font = new BitmapFont();
+        
+        fontBlack = new BitmapFont(Gdx.files.internal("ld35001-gradient.fnt"));
+        
+//        fontBlack.setColor(Color.BLACK);
         
         menuTextStory = new String[20];
         menuTextStory[0] = "Earth, 2016";

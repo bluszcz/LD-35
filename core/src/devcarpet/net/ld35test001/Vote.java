@@ -1,8 +1,109 @@
 package devcarpet.net.ld35test001;
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+
+import devcarpet.net.ld35test001.LD35001.Direction;
 
 public class Vote {
 
-	public BitmapFont font;
+	Vector2 position;
+	Direction direction;
+
+	Vector2 posShoot;
+	public float shootTimeLeft;
+	
+	
+	float osc;
+	int life;
+	Texture card;
+	public Vote() {
+		card = new Texture("votingcard.png");
+		
+		
+		Random rn = new Random();
+
+		
+		
+		
+		position = new Vector2(0,200);
+		position.x = rn.nextInt(1500);
+		position.y = rn.nextInt(400)
+				;
+		direction = Direction.RIGHT;
+		posShoot = new Vector2(0,0);
+		osc = 0.0f;
+		life = 1;
+		
+	}
+	
+	void update(float delta)
+	{
+    	float move;
+		move = (float) (0.1/delta);
+		if (direction==Direction.RIGHT)
+		{
+			position.x += move;
+		}
+		else if (direction==Direction.LEFT)
+		{
+			position.x -= move;
+		} 
+		
+		if (position.x>1600)
+		{
+			direction=Direction.LEFT;
+			
+		}
+		if (position.x<-800)
+		{
+			direction=Direction.RIGHT;
+			
+		}		
+		osc += delta*10;
+		float result = MathUtils.sin(osc);
+		position.y += result;
+		
+		if (shootTimeLeft>0)
+		{
+			shootTimeLeft -= delta;
+			
+		}
+		
+		if (shootTimeLeft<0)
+			shootTimeLeft=0;
+		
+		
+		Random rn = new Random();
+		int resultDice = rn.nextInt(400);
+		if (resultDice>390)
+			makeShoot();
+		
+		
+	}
+	
+	Rectangle getBoundingRectangle() {
+		int width = card.getWidth();
+		int height = card.getHeight();
+		Rectangle rect = new Rectangle(position.x, position.y, width, height);
+		return rect;
+		
+	}
+	
+	void makeShoot(){
+		if ((position.x>0) && (position.x<800))
+		{
+			Random rn = new Random();
+			posShoot.x = rn.nextInt(500)+200;
+			posShoot.y = rn.nextInt(200);
+			shootTimeLeft = 0.1f;
+		}
+	}
+	
 	
 }

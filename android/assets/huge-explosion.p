@@ -2,15 +2,15 @@ Explosion
 - Delay -
 active: false
 - Duration - 
-lowMin: 200.0
-lowMax: 200.0
+lowMin: 500.0
+lowMax: 500.0
 - Count - 
 min: 0
-max: 200
+max: 500
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 250.0
+highMin: 6000.0
 highMax: 250.0
 relative: false
 scalingCount: 1
@@ -21,7 +21,7 @@ timeline0: 0.0
 lowMin: 0.0
 lowMax: 0.0
 highMin: 250.0
-highMax: 500.0
+highMax: 1000.0
 relative: false
 scalingCount: 3
 scaling0: 1.0
@@ -103,9 +103,9 @@ active: false
 active: false
 - Tint - 
 colorsCount: 3
-colors0: 1.0
-colors1: 0.12156863
-colors2: 0.047058824
+colors0: 0.31764707
+colors1: 0.14901961
+colors2: 0.015686275
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -132,4 +132,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-particle-green.png
+/home/bluszcz/opt/libgdx/particle.png

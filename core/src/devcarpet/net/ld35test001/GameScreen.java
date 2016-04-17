@@ -2,6 +2,7 @@ package devcarpet.net.ld35test001;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.util.Random;
+import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,18 +26,32 @@ import devcarpet.net.ld35test001.LD35001.Direction;
 public class GameScreen implements Screen {
     final LD35001 game;
 
+    
+    ShapeRenderer shapeRenderer;
+    
 	SpriteBatch batch;
 	Texture background;
 	Texture backgroundOut;
 	Texture crossair;
+	Texture hoof;
 	
 	Direction scrollDirection;
 	Direction scrollOutDirection;
 	ParticleEffect effect;
+	
+	ParticleEffect effectExplosion;
+	
     Sound shootSound;
+    Sound explosionSound;
 
     Character character;
 	
+    
+    float timeCounter;
+    float spawnCounter;
+    
+    Vector<Vote> votingCards;
+    
 	float backPosX;
 	float backOutPosX;
     Music gameMusic;
@@ -44,29 +61,45 @@ public class GameScreen implements Screen {
     
     final int arraySizeSounds;
     Sound soundsAw[];
-    
-    
+    int deerLives;
+    int points;
+    Rectangle rectHoof;
+//    Vote votingCard;
     
     Vector3 getMousePosInGameWorld() {
     	 return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     	}
     
+    
+    void addVotingCard() {
+    	Vote card = new Vote();
+    	votingCards.add(card);	
+    }
+    
+    
     public GameScreen(final LD35001 gam) {
+    	deerLives = 1;
     	this.game = gam;
 		background = new Texture("bg-alpha-2400wide.png");
 		backgroundOut = new Texture("sky-bg.jpg");
+		hoof = new Texture("hoof.png");
 		crossair = new Texture("crossair.png");
 		scrollDirection = Direction.RIGHT;
 		backPosX = backOutPosX = 0.0f;
 		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("theme-chill.ogg"));
-		shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.ogg"));
+		shootSound = Gdx.audio.newSound(Gdx.files.internal("cast.ogg"));
+		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
+
 
 		gameMusic.setLooping(true);
 	       camera = new OrthographicCamera();
 	        camera.setToOrtho(false, 800, 480);
 		
 		effect = new ParticleEffect();
+		effectExplosion = new ParticleEffect();
+
 		effect.load(Gdx.files.internal("explosion.p"), Gdx.files.internal(""));
+		effectExplosion.load(Gdx.files.internal("huge-explosion.p"), Gdx.files.internal(""));
     	arraySize = 38;
 		characters = new Character[arraySize];
 		Random rn = new Random();
@@ -113,20 +146,44 @@ public class GameScreen implements Screen {
 	    		
 //	    		rect.x += backOutPosX;
 	    		
+	            for (int i = votingCards.size()-1; i >= 0; i--)
+	            {
+	            	Rectangle rectVote = votingCards.get(i).getBoundingRectangle();	
+	            
+	    		
+	    		
+		    		if ((rectVote.contains(mousePos.x, mousePos.y)) && (votingCards.get(i).life>0)) {
+		    			votingCards.get(i).life -= 1;
+	    	    		effectExplosion.start();
+	    	    		effectExplosion.setPosition(mousePos.x, mousePos.y);
+	    	    		points += 42;
+	    	    		votingCards.remove(i);
+		    		}
+	            }
+	    		
 	    		for (int i=0;i<arraySize;i++)
 	    		{
 		    		Rectangle rect = characters[i].getBoundingRectangle(backPosX);
 //		    		System.out.println(rect.x);
 
-		    		if (rect.contains(mousePos.x, mousePos.y)){
+		    		if ((rect.contains(mousePos.x, mousePos.y)) && (characters[i].life>0)) {
 		    			System.out.println("shoot");
 		    			characters[i].life -= 1;
-		    			
+		    			if (characters[i].life==0)
+		    			{
+		    				explosionSound.play();
+		    				points += 10;
+		    				
+		    	    		effectExplosion.start();
+		    	    		effectExplosion.setPosition(mousePos.x, mousePos.y);
+		    				
+		    			}
 		    			
 		    			Random rn = new Random();
 		    			int soundNumber = rn.nextInt(6);
 		    			System.out.println("shoot");
-		    			soundsAw[soundNumber].play();
+		    			soundsAw[soundNumber].play(0.2f);
+		    			points += 1;
 		    			
 		    		}
 	    		}
@@ -134,6 +191,21 @@ public class GameScreen implements Screen {
 			}
 
 		});
+		rectHoof = new Rectangle(360,0,hoof.getWidth(), hoof.getHeight());
+
+		points = 0;
+		
+//		votingCard = new Vote();
+		votingCards = new Vector();
+		for (int i=0;i<3;i++)
+		{
+			addVotingCard();
+
+		}
+
+		
+		timeCounter = spawnCounter = 0.0f;
+		shapeRenderer = new ShapeRenderer();
 		gameMusic.play();
 
 		
@@ -190,23 +262,35 @@ public class GameScreen implements Screen {
 				backOutPosX = -800.0f;
 				
 			}
-			
 
 		
-		
-		
-		
 		}
+		
+		
+		
 
 	}
 	
 	@Override
 	public void render(float delta) {
+		timeCounter += delta;
+		
+		spawnCounter +=delta;
+		if (spawnCounter>4)
+		{
+			addVotingCard();
+			spawnCounter = 0.0f;
+		}
+		
 		for (int i=0;i<arraySize;i++)
 		{
 			characters[i].update(delta);
 		}
-        
+        for (int i = votingCards.size()-1; i >= 0; i--)
+        {
+        	votingCards.get(i).update(delta);
+        }
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
@@ -214,6 +298,22 @@ public class GameScreen implements Screen {
 
 
         game.batch.draw(background,backPosX,0);
+        
+        
+        for (int i = votingCards.size()-1; i >= 0; i--)
+        {
+        	if (votingCards.get(i).life>0)
+        	{
+        		game.batch.draw(votingCards.get(i).card,
+        				votingCards.get(i).position.x,votingCards.get(i).position.y);
+        	}
+        }
+        
+//        if(votingCard.life>0)
+//        {
+//        	game.batch.draw(votingCard.card,votingCard.position.x,votingCard.position.y);
+//        }
+
         for (int i=0;i<arraySize;i++)
         {
         if (characters[i].life>0)
@@ -222,8 +322,27 @@ public class GameScreen implements Screen {
         
 
         effect.draw(game.batch, delta);
+        effectExplosion.draw(game.batch, delta);
 
         
+        game.fontBlack.draw(game.batch, "lives: "+deerLives, 30, 472);
+        game.fontBlack.draw(game.batch, "points: "+points, 600, 472);
+        game.fontBlack.draw(game.batch, "time: "+(int)timeCounter, 300, 472);
+
+        
+        game.font.draw(game.batch, "cards: "+votingCards.size(), 30, 20);
+        
+        int counterDevelopers = 0;
+		for (int i=0;i<arraySize;i++)
+		{
+			if (characters[i].life>0)
+				counterDevelopers++;
+		}
+        game.font.draw(game.batch, "developers: "+counterDevelopers, 660, 20);
+
+//        game.font.draw(game.batch, "cards: "+votingCards.size(), 30, 10);
+        game.batch.draw(hoof,360,0);
+
         game.batch.end();
 		
 
@@ -235,7 +354,64 @@ public class GameScreen implements Screen {
         }
         
         
+        
+        
         scrollBackground(delta);
+        
+        camera.update();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        
+        shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setColor(1, 1, 0, 1);
+        
+        for (int i = votingCards.size()-1; i >= 0; i--)
+        {
+        	if (votingCards.get(i).life>0)
+        	{
+        		if (votingCards.get(i).shootTimeLeft>0)
+        		{
+        			float x,y,x2,y2;
+        			x = votingCards.get(i).position.x;
+        			y = votingCards.get(i).position.y;
+        			shapeRenderer.line(x, y, 
+        					votingCards.get(i).posShoot.x,
+        					votingCards.get(i).posShoot.y);	
+        		}
+        		
+        		
+        	}
+        
+        }
+        shapeRenderer.end();
+        
+        
+        for (int i = votingCards.size()-1; i >= 0; i--)
+        {
+        	if (votingCards.get(i).life>0)
+        	{
+        		if (votingCards.get(i).shootTimeLeft>0)
+        			
+        		{
+        			if (rectHoof.contains(votingCards.get(i).posShoot))
+        			{
+        				votingCards.elementAt(i).shootTimeLeft=0;
+        				deerLives -= 1;
+        				
+        				if (deerLives==0)
+        				{
+        					gameMusic.stop();
+        					game.setScreen(new MainMenuScreen(game));
+        					dispose();
+        				}
+        	            
+        				
+        			}
+        		}
+        		
+    		}
+        }
+        
+        
         
 		
 	}
