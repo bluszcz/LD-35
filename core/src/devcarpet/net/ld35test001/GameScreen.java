@@ -81,9 +81,9 @@ public class GameScreen implements Screen {
 	}
 
 
-	public GameScreen(final LD35001 gam, int level) {
+	public GameScreen(final LD35001 gam, int level, int newPoints) {
 		currentLevel = level;
-		deerLives = 3;
+		deerLives = 1;
 		this.game = gam;
 		background = new Texture("bg-alpha-2400wide.png");
 		backgroundOut = new Texture("sky-bg.jpg");
@@ -144,7 +144,7 @@ public class GameScreen implements Screen {
 
 		rectHoof = new Rectangle(360,0,hoof.getWidth(), hoof.getHeight());
 
-		points = 0;
+		points = newPoints;
 
 		//		votingCard = new Vote();
 		votingCards = new Vector();
@@ -422,7 +422,7 @@ public class GameScreen implements Screen {
 						if (deerLives==0)
 						{
 							gameMusic.stop();
-							game.setScreen(new MainMenuScreen(game));
+							game.setScreen(new GameOverScreen(game, points, deerLives, currentLevel));
 							dispose();
 						}
 
@@ -465,12 +465,28 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		Gdx.input.setInputProcessor(new InputAdapter ());
+		hoof.dispose();
+		gameMusic.dispose();
+		shootSound.dispose();
+		
 
 	}
 
 	void nextLevel() {
 		gameMusic.stop();
-		game.setScreen(new GameScreen(game, currentLevel+1));
+		
+		if (currentLevel+1==1)
+		{
+			game.setScreen(new GameFinishScreen(game, points, deerLives, currentLevel));
+			dispose();
+
+		} else
+		{
+			game.setScreen(new GameScreen(game, currentLevel+1, points));
+			dispose();
+		}
+		
 		dispose();
 	}
 

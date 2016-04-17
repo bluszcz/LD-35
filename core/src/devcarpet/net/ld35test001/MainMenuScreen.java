@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
     
     Texture typingDeers[];
     
-    
+    float timeCounter;
     int startingLineText;
     String textText;
     float textPosX; 
@@ -71,6 +71,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		timeCounter += delta;
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -85,15 +86,23 @@ public class MainMenuScreen implements Screen {
 
         game.batch.begin();
         game.fontBlack.draw(game.batch, textText, textPosX, textPosY);
-        game.batch.end();
 		
-		
-        if (Gdx.input.isTouched()) {
-        	menuMusic.stop();
-            game.setScreen(new GameScreen(game, 0));
-            
-            dispose();
+        
+        if (timeCounter>3)
+        {
+    		game.font20.draw(game.batch, "Click / touch to continue", 200, 460);
+
+            if (Gdx.input.isTouched()) {
+            	menuMusic.stop();
+                game.setScreen(new GameScreen(game, 0,0));
+                
+                dispose();
+            }
         }
+        
+		
+        game.batch.end();
+
         
 //        if (Gdx.input.isButtonPressed(Buttons.LEFT)){
 //        	menuMusic.stop();
