@@ -43,6 +43,8 @@ public class GameScreen implements Screen {
 	ParticleEffect effect;
 
 	ParticleEffect effectExplosion;
+	ParticleEffect effectExplosionEnemy;
+
 
 	Vector2 hoofPos;
 	
@@ -60,6 +62,7 @@ public class GameScreen implements Screen {
 	float backPosX;
 	float backOutPosX;
 	Music gameMusic;
+	Sound shootEnemy;
 	OrthographicCamera camera;
 	final int arraySize;
 	Character characters[];
@@ -80,7 +83,7 @@ public class GameScreen implements Screen {
 
 
 	void addVotingCard() {
-		Vote card = new Vote(currentLevel);
+		Vote card = new Vote(currentLevel, this);
 		votingCards.add(card);	
 	}
 
@@ -97,7 +100,8 @@ public class GameScreen implements Screen {
 		scrollDirection = Direction.RIGHT;
 		backPosX = backOutPosX = 0.0f;
 		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("theme-chill.ogg"));
-		shootSound = Gdx.audio.newSound(Gdx.files.internal("cast.ogg"));
+		shootSound  = Gdx.audio.newSound(Gdx.files.internal("cast.ogg"));
+		shootEnemy  = Gdx.audio.newSound(Gdx.files.internal("shootEnemy.ogg"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
 		hoofPos = new Vector2(360,-20);
 
@@ -107,11 +111,14 @@ public class GameScreen implements Screen {
 
 		effect = new ParticleEffect();
 		effectExplosion = new ParticleEffect();
+		effectExplosionEnemy = new ParticleEffect();
 
 		effect.load(Gdx.files.internal("explosion.p"), Gdx.files.internal(""));
 		effectExplosion.load(Gdx.files.internal("huge-explosion.p"), Gdx.files.internal(""));
+		effectExplosionEnemy.load(Gdx.files.internal("explosion-enemy.p"), Gdx.files.internal(""));
 
-		levelsEnemies = new int[]{24,12,38};
+
+		levelsEnemies = new int[]{6,12,18};
 
 		arraySize = levelsEnemies[currentLevel];
 		characters = new Character[arraySize];
@@ -221,6 +228,8 @@ public class GameScreen implements Screen {
 			}
 
 		});
+		effectExplosionEnemy.start();
+
 		gameMusic.play();
 
 
@@ -338,6 +347,7 @@ public class GameScreen implements Screen {
 
 		effect.draw(game.batch, delta);
 		effectExplosion.draw(game.batch, delta);
+		effectExplosionEnemy.draw(game.batch, delta);
 
 
 		if (timeCounter<5)
@@ -409,6 +419,11 @@ public class GameScreen implements Screen {
 					shapeRenderer.line(x2, y2, 
 							votingCards.get(i).posShoot.x,
 							votingCards.get(i).posShoot.y);	
+					
+					if (votingCards.get(i).shootTimeLeft>0.0f)
+					
+					effectExplosion.setPosition(votingCards.get(i).posShoot.x, votingCards.get(i).posShoot.y);
+					
 				}
 
 

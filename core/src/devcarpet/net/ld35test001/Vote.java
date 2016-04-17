@@ -26,7 +26,9 @@ public class Vote {
 	float osc;
 	int life;
 	Texture card;
-	public Vote(int level) {
+	GameScreen game;
+	public Vote(int level, GameScreen gam) {
+		game = gam;
 		card = new Texture("votingcard.png");
 		currentLevel = level+1;
 		
@@ -110,7 +112,10 @@ public class Vote {
 			posShoot.x = rn.nextInt(500)+200;
 			posShoot.y = rn.nextInt(200);
 			shootTimeLeft = 0.1f;
+			game.effectExplosionEnemy.start();
+			game.effectExplosionEnemy.setPosition(posShoot.x, posShoot.y);
 		}
+			
 	}
 	
 	
