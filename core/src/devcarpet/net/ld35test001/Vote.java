@@ -114,6 +114,7 @@ public class Vote {
 			shootTimeLeft = 0.1f;
 			game.effectExplosionEnemy.start();
 			game.effectExplosionEnemy.setPosition(posShoot.x, posShoot.y);
+			game.shootEnemy.play();
 		}
 			
 	}

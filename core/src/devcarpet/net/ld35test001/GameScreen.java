@@ -44,12 +44,14 @@ public class GameScreen implements Screen {
 
 	ParticleEffect effectExplosion;
 	ParticleEffect effectExplosionEnemy;
+	ParticleEffect effectWound;
 
 
 	Vector2 hoofPos;
 	
 	Sound shootSound;
 	Sound explosionSound;
+	Sound woundSound;
 
 	Character character;
 
@@ -102,6 +104,7 @@ public class GameScreen implements Screen {
 		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("theme-chill.ogg"));
 		shootSound  = Gdx.audio.newSound(Gdx.files.internal("cast.ogg"));
 		shootEnemy  = Gdx.audio.newSound(Gdx.files.internal("shootEnemy.ogg"));
+		woundSound = Gdx.audio.newSound(Gdx.files.internal("wound.ogg"));
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
 		hoofPos = new Vector2(360,-20);
 
@@ -112,11 +115,12 @@ public class GameScreen implements Screen {
 		effect = new ParticleEffect();
 		effectExplosion = new ParticleEffect();
 		effectExplosionEnemy = new ParticleEffect();
+		effectWound = new ParticleEffect();
 
 		effect.load(Gdx.files.internal("explosion.p"), Gdx.files.internal(""));
 		effectExplosion.load(Gdx.files.internal("huge-explosion.p"), Gdx.files.internal(""));
 		effectExplosionEnemy.load(Gdx.files.internal("explosion-enemy.p"), Gdx.files.internal(""));
-
+		effectWound.load(Gdx.files.internal("wound.p"), Gdx.files.internal(""));
 
 		levelsEnemies = new int[]{6,12,18};
 
@@ -132,9 +136,9 @@ public class GameScreen implements Screen {
 		}
 
 		 names = new String[][] {		
-			 {"char-1.png","char-2.png"},
-			 {"char-1.png","char-2.png","char-3.png"},
-			{"char-1.png","char-2.png", "char-3.png"}};
+			 {"char-1.png","char-2.png", "char-4.png"},
+			 {"char-1.png","char-2.png","char-3.png", "char-4.png"},
+			{"char-1.png","char-2.png", "char-3.png", "char-4.png"}};
 		
 
 		int distStep = 1600/arraySize;
@@ -348,6 +352,7 @@ public class GameScreen implements Screen {
 		effect.draw(game.batch, delta);
 		effectExplosion.draw(game.batch, delta);
 		effectExplosionEnemy.draw(game.batch, delta);
+		effectWound.draw(game.batch, delta);
 
 
 		if (timeCounter<5)
@@ -447,6 +452,11 @@ public class GameScreen implements Screen {
 					{
 						votingCards.elementAt(i).shootTimeLeft=0;
 						deerLives -= 1;
+						woundSound.play();
+						effectWound.start();
+						effectWound.setPosition(votingCards.get(i).posShoot.x, votingCards.get(i).posShoot.y);
+
+
 
 						if (deerLives==0)
 						{
