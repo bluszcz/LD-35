@@ -95,11 +95,11 @@ public class MainMenuScreen implements Screen {
             dispose();
         }
         
-        if (Gdx.input.isButtonPressed(Buttons.LEFT)){
-        	menuMusic.stop();
-        	game.setScreen(new GameScreen(game));        	
-            dispose();
-        }
+//        if (Gdx.input.isButtonPressed(Buttons.LEFT)){
+//        	menuMusic.stop();
+//        	game.setScreen(new GameScreen(game));        	
+//            dispose();
+//        }
         
         
         if (textPosX>400)

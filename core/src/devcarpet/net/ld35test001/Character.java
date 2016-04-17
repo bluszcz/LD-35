@@ -33,7 +33,7 @@ public class Character {
     public Rectangle getBoundingRectangle(float backPos){
     	int height = currentFrame.getRegionHeight();
     	int width = currentFrame.getRegionWidth();
-    	Rectangle rect = new Rectangle(position.x+backPos, position.y, width/FRAME_COLS, height);
+    	Rectangle rect = new Rectangle(position.x+backPos, position.y, width, height);
 		return rect;
     	
     };

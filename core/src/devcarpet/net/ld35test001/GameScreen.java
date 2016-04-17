@@ -42,6 +42,11 @@ public class GameScreen implements Screen {
     final int arraySize;
     Character characters[];
     
+    final int arraySizeSounds;
+    Sound soundsAw[];
+    
+    
+    
     Vector3 getMousePosInGameWorld() {
     	 return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     	}
@@ -56,7 +61,6 @@ public class GameScreen implements Screen {
 		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("theme-chill.ogg"));
 		shootSound = Gdx.audio.newSound(Gdx.files.internal("shoot.ogg"));
 
-		gameMusic.play();
 		gameMusic.setLooping(true);
 	       camera = new OrthographicCamera();
 	        camera.setToOrtho(false, 800, 480);
@@ -67,6 +71,13 @@ public class GameScreen implements Screen {
 		characters = new Character[arraySize];
 		Random rn = new Random();
 
+
+	    arraySizeSounds = 6;
+	    soundsAw =    new Sound [arraySizeSounds];
+	    for (int i=0;i<arraySizeSounds;i++){
+	    	soundsAw[i] = Gdx.audio.newSound(Gdx.files.internal("aw0"+(i+1)+".ogg"));
+	    }
+		
 		String names[] = new String[] {"char-1.png","char-2.png"};
 		
 		
@@ -110,12 +121,21 @@ public class GameScreen implements Screen {
 		    		if (rect.contains(mousePos.x, mousePos.y)){
 		    			System.out.println("shoot");
 		    			characters[i].life -= 1;
+		    			
+		    			
+		    			Random rn = new Random();
+		    			int soundNumber = rn.nextInt(6);
+		    			System.out.println("shoot");
+		    			soundsAw[soundNumber].play();
+		    			
 		    		}
 	    		}
 				return true;
 			}
 
 		});
+		gameMusic.play();
+
 		
     }
     
