@@ -3,6 +3,8 @@ package devcarpet.net.ld35test001;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -14,7 +16,8 @@ public class GameFinishScreen implements Screen {
     int points;
     int deerLives;
     int currentLevel;
-    
+	Music sceneMusic;
+
 	
     public GameFinishScreen(final LD35001 gam, int newPoints, int lives, int level) {
         game = gam;
@@ -25,6 +28,10 @@ public class GameFinishScreen implements Screen {
         deerLives = lives;
         points = newPoints;
         Gdx.input.setInputProcessor(new InputAdapter ());
+        sceneMusic = Gdx.audio.newMusic(Gdx.files.internal("game-finish.ogg"));
+        sceneMusic.setLooping(true);
+        sceneMusic.play();
+        
     }
 
 	@Override
@@ -50,8 +57,9 @@ public class GameFinishScreen implements Screen {
     		game.font20.draw(game.batch, "Click / touch to continue", 40, 420);
 
         	if (Gdx.input.isTouched()) {
-//        		menuMusic.stop();
+        		sceneMusic.stop();
         		game.setScreen(new MainMenuScreen(game));
+                
 
             
             dispose();
