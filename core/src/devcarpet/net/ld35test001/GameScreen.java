@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
 		effectExplosionEnemy.load(Gdx.files.internal("explosion-enemy.p"), Gdx.files.internal(""));
 		effectWound.load(Gdx.files.internal("wound.p"), Gdx.files.internal(""));
 
-		levelsEnemies = new int[]{6,12,18};
+		levelsEnemies = new int[]{6,10,14,18};
 
 		arraySize = levelsEnemies[currentLevel];
 		characters = new Character[arraySize];
@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
 			{"char-1.png","char-2.png", "char-3.png", "char-4.png"}};
 		
 
-		int distStep = 1600/arraySize;
+		int distStep = 2200/arraySize;
 
 		for (int i=0;i<arraySize;i++)
 		{
@@ -149,7 +149,8 @@ public class GameScreen implements Screen {
 			String filename = names[currentLevel][answer];
 			//			float posX = (i * 70) + (answer*25) + (150*i);
 
-			float posX = 0 + (i * distStep) + (i * 70)+100;
+			float posX = 100 + (i * distStep) + (100/arraySize);
+			System.out.println(posX);
 			System.out.println(distStep + " " + posX);
 			float posY = rn.nextInt(70);
 			int lives = rn.nextInt((currentLevel+1)*3)+5;
@@ -164,7 +165,7 @@ public class GameScreen implements Screen {
 
 		//		votingCard = new Vote();
 		votingCards = new Vector();
-		for (int i=0;i<3*(currentLevel+1);i++)
+		for (int i=0;i<3*((currentLevel+1)/3);i++)
 		{
 			addVotingCard();
 
@@ -304,7 +305,7 @@ public class GameScreen implements Screen {
 		timeCounter += delta;
 
 		spawnCounter +=delta;
-		if (spawnCounter>8/(currentLevel+1))
+		if (spawnCounter>12/(currentLevel+1))
 		{
 			addVotingCard();
 			spawnCounter = 0.0f;
@@ -515,7 +516,7 @@ public class GameScreen implements Screen {
 	void nextLevel() {
 		gameMusic.stop();
 		
-		if (currentLevel+1==4)
+		if (currentLevel+1==5)
 		{
 			game.setScreen(new GameFinishScreen(game, points, deerLives, currentLevel));
 			dispose();
