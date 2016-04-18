@@ -21,5 +21,5 @@ Credits
 -------
 
 * code: bluszcz
-* gfx: https://ukata.me/
+* gfx: [Ukata](https://ukata.me/)
 * audio: bluszcz
