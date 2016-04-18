@@ -167,7 +167,7 @@ public class MainMenuScreen implements Screen {
         if (textPosY>500)
         {
         	startingLineText = startingLineText+1;
-        	if (startingLineText>19)
+        	if (startingLineText>11)
         	{
         		startingLineText = 0;
         		keyboard02.play();

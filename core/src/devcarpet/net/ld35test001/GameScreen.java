@@ -136,9 +136,10 @@ public class GameScreen implements Screen {
 		}
 
 		 names = new String[][] {		
+			 {"char-1.png","char-2.png"},
 			 {"char-1.png","char-2.png", "char-4.png"},
-			 {"char-1.png","char-2.png","char-3.png", "char-4.png"},
-			{"char-1.png","char-2.png", "char-3.png", "char-4.png"}};
+			 {"char-1.png","char-3.png", "char-4.png"},
+			{"char-1.png","char-2.png", "char-3.png", "char-4.png", "char-final.png"}};
 		
 
 		int distStep = 2200/arraySize;
@@ -150,8 +151,6 @@ public class GameScreen implements Screen {
 			//			float posX = (i * 70) + (answer*25) + (150*i);
 
 			float posX = 100 + (i * distStep) + (100/arraySize);
-			System.out.println(posX);
-			System.out.println(distStep + " " + posX);
 			float posY = rn.nextInt(70);
 			int lives = rn.nextInt((currentLevel+1)*3)+5;
 			characters[i] = new Character(posX, posY, filename, lives);
@@ -206,24 +205,19 @@ public class GameScreen implements Screen {
 				for (int i=0;i<arraySize;i++)
 				{
 					Rectangle rect = characters[i].getBoundingRectangle(backPosX);
-					//		    		System.out.println(rect.x);
-
 					if ((rect.contains(mousePos.x, mousePos.y)) && (characters[i].life>0)) {
-						System.out.println("shoot");
+						
 						characters[i].life -= 1;
 						if (characters[i].life==0)
 						{
 							explosionSound.play();
 							points += 10;
-
 							effectExplosion.start();
 							effectExplosion.setPosition(mousePos.x, mousePos.y);
 
 						}
-
 						Random rn = new Random();
 						int soundNumber = rn.nextInt(6);
-						System.out.println("shoot");
 						soundsAw[soundNumber].play(0.2f);
 						points += 1;
 
@@ -516,7 +510,7 @@ public class GameScreen implements Screen {
 	void nextLevel() {
 		gameMusic.stop();
 		
-		if (currentLevel+1==5)
+		if (currentLevel+1==4)
 		{
 			game.setScreen(new GameFinishScreen(game, points, deerLives, currentLevel));
 			dispose();

@@ -38,36 +38,30 @@ public class LD35001 extends Game {
         
 //        fontBlack.setColor(Color.BLACK);
         
-        menuTextStory = new String[20];
-        menuTextStory[0] = "Earth, 2016";
-        menuTextStory[1] = "Our planet.";
-        menuTextStory[2] = "You are a game designer,";
-        menuTextStory[3] = "who had decided to participate";
-        menuTextStory[4] = "in Ludum Dare 35.";
-        menuTextStory[5] = "was awaiting all night long";
-        menuTextStory[6] = "to see the voting results.";
-        menuTextStory[7] = "Until 3 fucking am.";
-        menuTextStory[8] = "What he had seen";
-        menuTextStory[9] = "scarried shit out of him";
-        menuTextStory[10] = "Shapeshifter theme,";
-        menuTextStory[11] = "just badly based werewolves bla bla.";
-        menuTextStory[12] = "He had decided to go the forest";
-        menuTextStory[13] = "and suicide!";
-        menuTextStory[14] = "(like in Lars von Trier movie)";
-        menuTextStory[15] = "Yeah - nice hhuh?";
-        menuTextStory[16] = "and then thunderbolt hit (kbnaoom madafuaka)";
-        menuTextStory[17] = "changing int revengey deer!";
-        menuTextStory[18] = "Yes yes";
-        menuTextStory[19] = "He is coming after you!";
+        menuTextStory = new String[13];
+        menuTextStory[0] = "Earth, 2016.";
+        menuTextStory[1] = "This game";
+        menuTextStory[2] = "is about a game designer";
+        menuTextStory[3] = "who was disappointed";
+        menuTextStory[4] = "with ld 35 voting results";
+        menuTextStory[5] = "and transformed himself";
+        menuTextStory[6] = "into a Deer.";
+        menuTextStory[7] = "The Deer, looking for a revenge.";
+        menuTextStory[8] = "Deershifter";
+        menuTextStory[9] = "code: bluszcz";
+        menuTextStory[10] = "visual art: ukata";
+        menuTextStory[11] = "sfx / music: bluszcz";
+        menuTextStory[12] = "Enjoy the game!";
+        
         
         customCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("crossair.png")), 16, 16);
         Gdx.graphics.setCursor(customCursor);
 
-        menuTextCords = new float[20][];
+        menuTextCords = new float[13][];
 
         float startTextX = 720;
         float startTextY = 30;
-        for (int i=0;i<20;i++)
+        for (int i=0;i<13;i++)
         	
         {
         	menuTextCords[i]= new float[]{startTextX,startTextY};
