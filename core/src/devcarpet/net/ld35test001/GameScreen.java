@@ -169,6 +169,7 @@ public class GameScreen implements Screen {
 			addVotingCard();
 
 		}
+		addVotingCard();
 		for (int i=0;i<arraySize;i++)
 		{
 			characters[i].update(0);

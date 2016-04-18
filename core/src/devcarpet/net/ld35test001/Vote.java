@@ -18,7 +18,7 @@ public class Vote {
 	Vector2 posShoot;
 	public float shootTimeLeft;
 	
-	
+	int shootCounter;
 	
 	int variety;
 	
@@ -45,6 +45,7 @@ public class Vote {
 		posShoot = new Vector2(0,0);
 		osc = 0.0f;
 		life = 1;
+		shootCounter = 0;
 		
 	}
 	
@@ -106,11 +107,36 @@ public class Vote {
 	}
 	
 	void makeShoot(){
+
+		
+		
 		if ((position.x>0) && (position.x<800))
 		{
-			Random rn = new Random();
-			posShoot.x = rn.nextInt(500)+200;
-			posShoot.y = rn.nextInt(200);
+			
+			
+			shootCounter += 1;
+			
+			if (shootCounter%6==0)
+			{
+				posShoot.x = 370;
+				posShoot.y = 5;
+				
+			} else {
+					
+				Random rn = new Random();
+				
+				int accuracy = rn.nextInt(100);
+				 if (accuracy > 80)
+				 {
+					posShoot.x = rn.nextInt(200)+300;
+					posShoot.y = rn.nextInt(100);
+				 } else
+				 {
+					 posShoot.x = rn.nextInt(500)+300;
+					 posShoot.y = rn.nextInt(200);	 
+				 }
+			}
+			
 			shootTimeLeft = 0.1f;
 			game.effectExplosionEnemy.start();
 			game.effectExplosionEnemy.setPosition(posShoot.x, posShoot.y);
