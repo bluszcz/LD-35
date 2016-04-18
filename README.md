@@ -6,6 +6,8 @@ Ludum Dare 35 game jam submission
 
 ![Dershifter](http://ludumdare.com/compo/wp-content/compo2//542293/55906-shot0-1461011162.png-eq-900-500.jpg)
 
+2D shooter targeting developers.
+
 Crossplatform
 
 * Android
