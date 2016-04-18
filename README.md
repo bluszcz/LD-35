@@ -20,6 +20,6 @@ More downloads, web verion: https://devcarpet.net/deershifter/
 Credits
 -------
 
-* code: @bluszcz
-* gfx: @ukata
-* audio: @bluszcz
+* code: bluszcz
+* gfx: https://ukata.me/
+* audio: bluszcz
